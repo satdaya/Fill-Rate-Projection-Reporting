@@ -12,10 +12,10 @@ AS (
 
 SELECT [SQLAccess.Part].[idnumber]
        ,[PartNumber]
-	   ,RIGHT(
-	           [PartNumber]
-	          ,LEN([PartNumber]) -3
-	          ) AS [short_part_number]
+       ,RIGHT(
+	      [PartNumber]
+	     ,LEN([PartNumber]) -3
+	      ) AS [short_part_number]
        ,SUM( [OnHand] ) AS [qty_oh]
   FROM [SQLAccess.Part]
   LEFT JOIN [SQLAccess.Partco]
