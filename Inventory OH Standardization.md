@@ -94,23 +94,23 @@ DROP TABLE IF EXISTS [4_wk_prjctd_dmnd_nocust_columnar_v5];
 CREATE TABLE [4_wk_prjctd_dmnd_nocust_columnar_v5](
                                       [item_id]                 VARCHAR(54)
                                      ,[line_code]               VARCHAR(54)
-								     ,[class_code]              VARCHAR(54)
-								     ,[pop_code]                VARCHAR(54) 
-									 ,[dec_wk_3_dmnd]           NUMERIC(10, 2)
-									 ,[dec_wk_4_dmnd]           NUMERIC(10, 2)
-									 ,[dec_wk_5_dmnd]           NUMERIC(10, 2)
-									 ,[jan_wk_1_dmnd]           NUMERIC(10, 2)
+                                     ,[class_code]              VARCHAR(54)
+                                     ,[pop_code]                VARCHAR(54) 
+                                     ,[dec_wk_3_dmnd]           NUMERIC(10, 2)
+                                     ,[dec_wk_4_dmnd]           NUMERIC(10, 2)
+                                     ,[dec_wk_5_dmnd]           NUMERIC(10, 2)
+                                     ,[jan_wk_1_dmnd]           NUMERIC(10, 2)
 									 )
 
 INSERT INTO [4_wk_prjctd_dmnd_nocust_columnar_v5](
                                       [item_id]
                                      ,[line_code]
-								     ,[class_code]
-								     ,[pop_code]
-									 ,[dec_wk_3_dmnd]
-									 ,[dec_wk_4_dmnd]
-									 ,[dec_wk_5_dmnd]
-									 ,[jan_wk_1_dmnd] 
+                                     ,[class_code]
+                                     ,[pop_code]
+                                     ,[dec_wk_3_dmnd]
+                                     ,[dec_wk_4_dmnd]
+                                     ,[dec_wk_5_dmnd]
+                                     ,[jan_wk_1_dmnd] 
 									 )
 
 SELECT DISTINCT [item_id]
