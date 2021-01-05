@@ -19,8 +19,8 @@ SELECT
    [SQLAccess.Part].[idnumber]
   ,[PartNumber]
   ,RIGHT(
-         [PartNumber]
-        ,LEN([PartNumber]) -3
+     [PartNumber]
+    ,LEN([PartNumber]) -3
          ) AS [short_part_number]
   ,SUM( [OnHand] ) AS [qty_oh]
   FROM [SQLAccess.Part]
@@ -29,8 +29,8 @@ SELECT
   WHERE [SQLAccess.Partco].[co] = '2'
 GROUP BY 
    RIGHT(
-	     [SQLAccess.Part].[idnumber]
-	    ,LEN([PartNumber]) -3
+     [SQLAccess.Part].[idnumber]
+    ,LEN([PartNumber]) -3
 	     ) 
    ,[PartNumber]
    ,[SQLAccess.Part].[idnumber]
