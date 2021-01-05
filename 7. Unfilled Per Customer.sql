@@ -11,6 +11,7 @@ CREATE TABLE [unfilled_by_cust]
   ,[unfill_by_cust_wk2] NUMERIC(10, 2)
   ,[unfill_by_cust_wk3] NUMERIC(10, 2)
   ,[unfill_by_cust_wk4] NUMERIC(10, 2)
+  ,PRIMARY KEY ([item_id], [top_customer])
   );
 
 WITH 
@@ -26,14 +27,14 @@ AS
       DISTINCT [cust_allctn].[item_id]
      ,[cust_allctn].[top_customer]
      ,(
-       SUM( [dec_4_wk_prjctd_dmnd_dev_v2].[dec_wk_4_dmnd] )
+       SUM(  [projctd_dmnd_weekly_buckets].[1_wk_out] )
        -
        SUM( [cust_allctn].[allctn_by_cust_wk1] )
        )
    FROM [cust_allctn]
-   JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-     ON [cust_allctn].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    AND [cust_allctn].[top_customer] = [dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
+   JOIN  [projctd_dmnd_weekly_buckets]
+     ON [cust_allctn].[item_id] =  [projctd_dmnd_weekly_buckets].[item_id]
+    AND [cust_allctn].[top_customer] =  [projctd_dmnd_weekly_buckets].[top_customer]
    GROUP BY 
       [cust_allctn].[item_id]
      ,[cust_allctn].[top_customer]
@@ -53,14 +54,14 @@ AS
      ,[cust_allctn].[top_customer]
      ,
       (
-      SUM( [dec_4_wk_prjctd_dmnd_dev_v2].[dec_wk_5_dmnd] )
+      SUM(  [projctd_dmnd_weekly_buckets].[2_wk_out] )
       -
       SUM( [cust_allctn].[allctn_by_cust_wk2] )
       )
    FROM [cust_allctn]
-   JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-     ON [cust_allctn].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    AND [cust_allctn].[top_customer] = [dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
+   JOIN  [projctd_dmnd_weekly_buckets]
+     ON [cust_allctn].[item_id] =  [projctd_dmnd_weekly_buckets].[item_id]
+    AND [cust_allctn].[top_customer] =  [projctd_dmnd_weekly_buckets].[top_customer]
    GROUP BY 
       [cust_allctn].[item_id]
      ,[cust_allctn].[top_customer]
@@ -79,14 +80,14 @@ AS
       DISTINCT [cust_allctn].[item_id]
      ,[cust_allctn].[top_customer]
      ,(
-      SUM( [dec_4_wk_prjctd_dmnd_dev_v2].[jan_wk_1_dmnd] )
+      SUM(  [projctd_dmnd_weekly_buckets].[3_wk_out] )
       -
       SUM( [cust_allctn].[allctn_by_cust_wk3] )
       )
    FROM [cust_allctn]
-   JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-     ON [cust_allctn].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    AND [cust_allctn].[top_customer] = [dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
+   JOIN  [projctd_dmnd_weekly_buckets]
+     ON [cust_allctn].[item_id] =  [projctd_dmnd_weekly_buckets].[item_id]
+    AND [cust_allctn].[top_customer] =  [projctd_dmnd_weekly_buckets].[top_customer]
    GROUP BY 
       [cust_allctn].[item_id]
      ,[cust_allctn].[top_customer]
@@ -105,14 +106,14 @@ AS
       DISTINCT [cust_allctn].[item_id]
      ,[cust_allctn].[top_customer]
      ,(
-      SUM( [dec_4_wk_prjctd_dmnd_dev_v2].[jan_wk_2_dmnd] )
+      SUM(  [projctd_dmnd_weekly_buckets].[4_wk_out]  )
       -
       SUM( [cust_allctn].[allctn_by_cust_wk4] )
       )
    FROM [cust_allctn]
-   JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-     ON [cust_allctn].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    AND [cust_allctn].[top_customer] = [dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
+   JOIN  [projctd_dmnd_weekly_buckets]
+     ON [cust_allctn].[item_id] =  [projctd_dmnd_weekly_buckets].[item_id]
+    AND [cust_allctn].[top_customer] =  [projctd_dmnd_weekly_buckets].[top_customer]
    GROUP BY 
       [cust_allctn].[item_id]
      ,[cust_allctn].[top_customer]
@@ -160,4 +161,3 @@ GROUP BY
   ,[item_lu].[pop_code]
   ,[cte_unfilled_wk1].[top_customer] 
   
-
