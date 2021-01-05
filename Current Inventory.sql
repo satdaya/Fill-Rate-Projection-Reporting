@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS [current_inventory];
 
 CREATE TABLE [current_inventory] (
-    [short_partnumber]  VARCHAR (54)
+    [short_partnumber]  VARCHAR (54) PRIMARY KEY
    ,[qty_oh]            NUMERIC (10, 2)
    ) ;
 
