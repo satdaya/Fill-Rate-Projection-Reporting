@@ -1,48 +1,81 @@
-DROP TABLE IF EXISTS [po_la_deux_1.1.2021_cleaned]
+DROP TABLE IF EXISTS [po_la_deux_cleaned];
 
-CREATE TABLE [po_la_deux_1.1.2021_cleaned]
+CREATE TABLE [po_la_deux_cleaned]
   (
     [item_id]       VARCHAR (54)
-   ,[po_#]          VARCHAR (54)
-   ,[qty_it]        INT
-   ,[due_date]      VARCHAR(11)
+   ,[line_code]     VARCHAR (54)
    ,[1_wk_out_recv] INT
    ,[2_wk_out_recv] INT
    ,[3_wk_out_recv] INT
    ,[4_wk_out_recv] INT
-  )
+   ,[5_wk_out_recv] INT
+   ,[6_wk_out_recv] INT
+  );
 
-INSERT INTO [po_la_deux_1.1.2021_cleaned]
+WITH [cte_po_ld_buckets]
   (
     [item_id]
-   ,[po_#]
-   ,[qty_it]
-   ,[due_date]
+   ,[line_code]
    ,[1_wk_out_recv]
    ,[2_wk_out_recv]
    ,[3_wk_out_recv]
    ,[4_wk_out_recv]
+   ,[5_wk_out_recv]
+   ,[6_wk_out_recv]
   )
+AS
+  (
 
 SELECT
     [Part_Number]
-   ,[po_#]
-   ,SUM([qty_it])
-   ,[due_date]
-   ,CASE WHEN [due_date] BETWEEN '2020-12-15' AND '2021-01-07'
-         THEN SUM([qty_it])
+   ,[line_code]
+   ,CASE WHEN [dbd] BETWEEN '2020-12-15' AND '2021-01-30'
+         THEN SUM([qty])
          END
-   ,CASE WHEN [due_date] BETWEEN '2021-01-09' AND '2021-01-15'
-         THEN SUM([qty_it])
+   ,CASE WHEN [dbd] BETWEEN '2021-01-30' AND '2021-02-05'
+         THEN SUM([qty])
          END
-   ,CASE WHEN [due_date] BETWEEN '2021-01-16' AND '2021-01-22'
-         THEN SUM([qty_it])
+   ,CASE WHEN [dbd] BETWEEN '2021-02-06' AND '2021-02-12'
+         THEN SUM([qty])
          END
-   ,CASE WHEN [due_date] BETWEEN '2021-01-23' AND '2021-01-29'
-         THEN SUM([qty_it])
+   ,CASE WHEN [dbd] BETWEEN '2021-02-13' AND '2021-02-19'
+         THEN SUM([qty])
          END
- FROM [po_la_deux_raw_1.1.21]
+   ,CASE WHEN [dbd] BETWEEN '2021-02-20' AND '2021-02-26'
+         THEN SUM([qty])
+         END
+   ,CASE WHEN [dbd] BETWEEN '2021-02-27' AND '2021-03-05'
+         THEN SUM([qty])
+         END
+ FROM [po_ld_1.23.2021]
 GROUP BY
    [Part_Number]
-  ,[po_#]
-  ,[due_date]
+  ,[line_code]
+  ,[dbd]
+)
+INSERT INTO [po_la_deux_cleaned]
+  (
+    [item_id]
+   ,[line_code]
+   ,[1_wk_out_recv]
+   ,[2_wk_out_recv]
+   ,[3_wk_out_recv]
+   ,[4_wk_out_recv]
+   ,[5_wk_out_recv]
+   ,[6_wk_out_recv]
+  )
+
+SELECT
+    [item_id]
+   ,[line_code]
+   ,SUM( [1_wk_out_recv] )
+   ,SUM( [2_wk_out_recv] )
+   ,SUM( [3_wk_out_recv] )
+   ,SUM( [4_wk_out_recv] )
+   ,SUM( [5_wk_out_recv] )
+   ,SUM( [6_wk_out_recv] )
+FROM [cte_po_ld_buckets]
+GROUP BY 
+    [item_id]
+   ,[line_code]
+
