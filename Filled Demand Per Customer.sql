@@ -1,254 +1,197 @@
-DROP TABLE IF EXISTS [cust_allctn];
+DROP TABLE IF EXISTS [fill_rate_proj_1_31_21];
 
-CREATE TABLE [cust_allctn]
- (
-   [item_id]            VARCHAR(54)
-  ,[line_code]          VARCHAR(54)
-  ,[class_code]         VARCHAR(54)
-  ,[pop_code]           VARCHAR(54)
-  ,[top_customer]       VARCHAR(54)
-  ,[allctn_by_cust_wk1] NUMERIC(10, 2)
-  ,[allctn_by_cust_wk2] NUMERIC(10, 2)
-  ,[allctn_by_cust_wk3] NUMERIC(10, 2)
-  ,[allctn_by_cust_wk4] NUMERIC(10, 2)
-)
-;
-WITH
-  [cte_cust_allctn_wk1]
+CREATE TABLE [fill_rate_proj_1_31_21]
   (
-    [item_id]
-   ,[top_customer] 
-   ,[allctn_by_cust_wk1]
+   [top_customer]  VARCHAR(54)
+  ,[line_code]     VARCHAR(54)
+  ,[wk1_fill_rate] FLOAT
+  ,[wk2_fill_rate] FLOAT
+  ,[wk3_fill_rate] FLOAT
+  ,[wk4_fill_rate] FLOAT
+  ,[wk5_fill_rate] FLOAT
+  ,[wk6_fill_rate] FLOAT
   )
 
-  AS
+INSERT INTO [fill_rate_proj_1_31_21]
   (
-   SELECT
-     DISTINCT [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    ,[top_customer]
-    ,CASE WHEN 
-        (
-        SUM( SUM([eow_oh_wk1]) ) OVER
-        ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) 
-        = 0 )
-        OR
-        (
-        SUM( SUM([eow_oh_wk1]) ) OVER
-           ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id])
-        = 0 
-        )
-        THEN 0
-        ELSE
-            CASE WHEN ( SUM([eow_oh_wk1])
-                          > 
-                        SUM([dec_wk_4_dmnd])
-                      )
-                 THEN   SUM( SUM( [dec_wk_4_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] )
-                 ELSE  (
-                        SUM( SUM([eow_oh_wk1]) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id] )
-                          /
-                       SUM( SUM( [dec_wk_4_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) )
-                 END
-        END
-    FROM [available_dev]
-    JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-      ON [available_dev].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    GROUP BY 
-      [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-     ,[dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
-   )
-,
-
-   [cte_cust_allctn_wk2]
-  (
-    [item_id]
-   ,[top_customer] 
-   ,[allctn_by_cust_wk2]
+   [top_customer]
+  ,[line_code]     
+  ,[wk1_fill_rate] 
+  ,[wk2_fill_rate] 
+  ,[wk3_fill_rate] 
+  ,[wk4_fill_rate] 
+  ,[wk5_fill_rate] 
+  ,[wk6_fill_rate] 
   )
-
-
-  AS
-  (
-   SELECT
-     DISTINCT [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    ,[top_customer]
-    ,CASE WHEN 
-        (
-        SUM( SUM([eow_oh_wk2]) ) OVER
-        ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) 
-        = 0 )
-        OR
-        (
-        SUM( SUM([eow_oh_wk2]) ) OVER
-           ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id])
-        = 0 
-        )
-        THEN 0
-        ELSE
-            CASE WHEN ( SUM([eow_oh_wk2])
-                          > 
-                        SUM([dec_wk_5_dmnd])
-                      )
-                 THEN   SUM( SUM( [dec_wk_5_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] )
-                 ELSE  (
-                        SUM( SUM([eow_oh_wk2]) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id] )
-                          /
-                       SUM( SUM( [dec_wk_5_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) )
-                 END
-        END
-    FROM [available_dev]
-    JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-      ON [available_dev].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    GROUP BY 
-      [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-     ,[dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
-   )
-,
-
-   [cte_cust_allctn_wk3]
-  (
-    [item_id]
-   ,[top_customer] 
-   ,[allctn_by_cust_wk3]
-  )
-
-
-  AS
-  (
-   SELECT
-     DISTINCT [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    ,[top_customer]
-    ,CASE WHEN 
-        (
-        SUM( SUM([eow_oh_wk3]) ) OVER
-        ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) 
-        = 0 )
-        OR
-        (
-        SUM( SUM([eow_oh_wk3]) ) OVER
-           ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id])
-        = 0 
-        )
-        THEN 0
-        ELSE
-            CASE WHEN ( SUM([eow_oh_wk3])
-                          > 
-                        SUM([jan_wk_1_dmnd])
-                      )
-                 THEN   SUM( SUM( [jan_wk_1_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] )
-                 ELSE  (
-                        SUM( SUM([eow_oh_wk3]) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id] )
-                          /
-                       SUM( SUM( [jan_wk_1_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) )
-                 END
-        END
-    FROM [available_dev]
-    JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-      ON [available_dev].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    GROUP BY 
-      [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-     ,[dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
-   )
-,
-
-   [cte_cust_allctn_wk4]
-  (
-    [item_id]
-   ,[top_customer] 
-   ,[allctn_by_cust_wk4]
-  )
-
-
-  AS
-  (
-   SELECT
-     DISTINCT [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    ,[top_customer]
-    ,CASE WHEN 
-        (
-        SUM( SUM([eow_oh_wk4]) ) OVER
-        ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) 
-        = 0 )
-        OR
-        (
-        SUM( SUM([eow_oh_wk4]) ) OVER
-           ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id])
-        = 0 
-        )
-        THEN 0
-        ELSE
-            CASE WHEN ( SUM([eow_oh_wk4])
-                          > 
-                        SUM([jan_wk_2_dmnd])
-                      )
-                 THEN   SUM( SUM( [jan_wk_2_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] )
-                 ELSE  (
-                        SUM( SUM([eow_oh_wk4]) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id] )
-                          /
-                       SUM( SUM( [jan_wk_2_dmnd] ) ) OVER
-                          ( PARTITION BY [dec_4_wk_prjctd_dmnd_dev_v2].[item_id], [top_customer] ) )
-                 END
-        END
-    FROM [available_dev]
-    JOIN [dec_4_wk_prjctd_dmnd_dev_v2]
-      ON [available_dev].[item_id] = [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-    GROUP BY 
-      [dec_4_wk_prjctd_dmnd_dev_v2].[item_id]
-     ,[dec_4_wk_prjctd_dmnd_dev_v2].[top_customer]
-   )
-
- INSERT INTO [cust_allctn]
-  (
-   [item_id]
-  ,[line_code]
-  ,[class_code]
-  ,[pop_code]
-  ,[top_customer]
-  ,[allctn_by_cust_wk1]
-  ,[allctn_by_cust_wk2]
-  ,[allctn_by_cust_wk3]
-  ,[allctn_by_cust_wk4]
-)
 
 SELECT
-   [cte_cust_allctn_wk1].[item_id] 
-  ,[item_lu].[line_code]
-  ,[item_lu].[class_code]
-  ,[item_lu].[pop_code]
-  ,[cte_cust_allctn_wk1].[top_customer] 
-  ,SUM([cte_cust_allctn_wk1].[allctn_by_cust_wk1])
-  ,SUM([cte_cust_allctn_wk2].[allctn_by_cust_wk2])
-  ,SUM([cte_cust_allctn_wk3].[allctn_by_cust_wk3])
-  ,SUM([cte_cust_allctn_wk4].[allctn_by_cust_wk4])
-FROM [cte_cust_allctn_wk1]
-LEFT JOIN [item_lu]
-       ON [cte_cust_allctn_wk1].[item_id] = [item_lu].[part_number]
-JOIN [cte_cust_allctn_wk2]
-  ON [cte_cust_allctn_wk1].[item_id] = [cte_cust_allctn_wk2].[item_id]
- AND [cte_cust_allctn_wk1].[top_customer] = [cte_cust_allctn_wk2].[top_customer]
-JOIN [cte_cust_allctn_wk3]
-  ON [cte_cust_allctn_wk1].[item_id] = [cte_cust_allctn_wk3].[item_id]
- AND [cte_cust_allctn_wk1].[top_customer] = [cte_cust_allctn_wk3].[top_customer]
-JOIN [cte_cust_allctn_wk4]
-  ON [cte_cust_allctn_wk1].[item_id] = [cte_cust_allctn_wk4].[item_id]
- AND [cte_cust_allctn_wk1].[top_customer] = [cte_cust_allctn_wk4].[top_customer]
-GROUP BY
-   [cte_cust_allctn_wk1].[item_id] 
-  ,[item_lu].[line_code]
-  ,[item_lu].[class_code]
-  ,[item_lu].[pop_code]
-  ,[cte_cust_allctn_wk1].[top_customer] 
+    DISTINCT [cust_allctn].[top_customer]
+   ,CASE WHEN [cust_allctn].[line_code] = 'DRR'
+         THEN 'DRR'
+         WHEN [cust_allctn].[line_code] = 'FRC'
+         THEN 'FRC'
+         WHEN [cust_allctn].[line_code] = 'CAL'
+         THEN 'CAL'
+         WHEN [cust_allctn].[line_code] = 'CHY'
+         THEN 'CHY'
+         WHEN [cust_allctn].[line_code] = 'HYD'
+         THEN 'HYD'
+         WHEN [cust_allctn].[line_code] = 'SAS'
+         THEN 'SAS'
+         ELSE 'All Other'
+         END
+   ,CASE WHEN
+       
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk1])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk1])
+         )
 
+        = 0 
+       THEN 0
+       ELSE
+       ( 
+         SUM([cust_allctn].[allctn_by_cust_wk1])
+         /
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk1])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk1])
+         )
+       )
+       END
+       AS [wk1_fill_rate]
+   ,CASE WHEN
+       
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk2])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk2])
+         )
 
+        = 0 
+       THEN 0
+       ELSE
+       ( 
+         SUM([cust_allctn].[allctn_by_cust_wk2])
+         /
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk2])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk2])
+         )
+       )
+       END
+       AS [wk2_fill_rate]
+   ,CASE WHEN
+       
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk3])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk3])
+         )
 
+        = 0 
+       THEN 0
+       ELSE
+       ( 
+         SUM([cust_allctn].[allctn_by_cust_wk3])
+         /
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk3])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk3])
+         )
+       )
+       END
+       AS [wk3_fill_rate]
+   ,CASE WHEN
+       
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk4])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk4])
+         )
+
+        = 0 
+       THEN 0
+       ELSE
+       ( 
+         SUM([cust_allctn].[allctn_by_cust_wk4])
+         /
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk4])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk4])
+         )
+       )
+       END
+       AS [wk4_fill_rate]
+   ,CASE WHEN
+       
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk5])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk5])
+         )
+
+        = 0 
+       THEN 0
+       ELSE
+       ( 
+         SUM([cust_allctn].[allctn_by_cust_wk5])
+         /
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk5])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk5])
+         )
+       )
+       END
+       AS [wk5_fill_rate]
+   ,CASE WHEN
+       
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk6])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk6])
+         )
+
+        = 0 
+       THEN 0
+       ELSE
+       ( 
+         SUM([cust_allctn].[allctn_by_cust_wk6])
+         /
+         (
+           SUM([cust_allctn].[allctn_by_cust_wk6])
+           +
+           SUM([unfilled_by_cust].[unfill_by_cust_wk6])
+         )
+       )
+       END
+       AS [wk6_fill_rate]
+  FROM [cust_allctn]
+  JOIN [unfilled_by_cust]
+    ON [cust_allctn].[item_id] = [unfilled_by_cust].[item_id]
+   AND [cust_allctn].[top_customer] = [unfilled_by_cust].[top_customer]
+  --WHERE [cust_allctn].[item_id]  = '121.44158'
+  GROUP BY
+    [cust_allctn].[top_customer]
+   ,CASE WHEN [cust_allctn].[line_code] = 'DRR'
+         THEN 'DRR'
+         WHEN [cust_allctn].[line_code] = 'FRC'
+         THEN 'FRC'
+         WHEN [cust_allctn].[line_code] = 'CAL'
+         THEN 'CAL'
+         WHEN [cust_allctn].[line_code] = 'CHY'
+         THEN 'CHY'
+         WHEN [cust_allctn].[line_code] = 'HYD'
+         THEN 'HYD'
+         WHEN [cust_allctn].[line_code] = 'SAS'
+         THEN 'SAS'
+         ELSE 'All Other'
+         END
+  ORDER BY
+    [cust_allctn].[top_customer]
