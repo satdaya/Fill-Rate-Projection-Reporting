@@ -1,3 +1,16 @@
+/*
+This query determines the % allocated we can allocate per customer based upon the EOW inventory projection.
+The core sku aggregation is below:
+
+                        SUM([eow_oh_wk1_no_dmnd])
+                          /
+                       SUM( SUM( [projctd_dmnd_weekly_buckets].[1_wk_out] ) ) OVER
+                          ( PARTITION BY [top_customer] ) )
+                          
+The remainder of the query is an allocation order to ensure that multiple
+customers are not dividing by one, generating negative quantities.
+*/
+
 DROP TABLE IF EXISTS [cust_allctn];
 
 CREATE TABLE [cust_allctn]
@@ -100,7 +113,7 @@ WITH
                         SUM([eow_oh_wk1_no_dmnd])
                           /
                        SUM( SUM( [projctd_dmnd_weekly_buckets].[1_wk_out] ) ) OVER
-                          ( PARTITION BY [projctd_dmnd_weekly_buckets].[item_id], [top_customer] ) )
+                          ( PARTITION BY [top_customer] ) )
                  END
         END
     FROM [available_dev_no_dmnd]
@@ -194,7 +207,7 @@ WITH
                         SUM([eow_oh_wk2_no_dmnd])
                           /
                        SUM( SUM( [projctd_dmnd_weekly_buckets].[2_wk_out] ) ) OVER
-                          ( PARTITION BY [projctd_dmnd_weekly_buckets].[item_id], [top_customer] ) )
+                          ( PARTITION BY [top_customer] ) )
                  END
         END
     FROM [available_dev_no_dmnd]
@@ -288,7 +301,7 @@ WITH
                         SUM([eow_oh_wk3_no_dmnd])
                           /
                        SUM( SUM( [projctd_dmnd_weekly_buckets].[3_wk_out] ) ) OVER
-                          ( PARTITION BY [projctd_dmnd_weekly_buckets].[item_id], [top_customer] ) )
+                          ( PARTITION BY [top_customer] ) )
                  END
         END
     FROM [available_dev_no_dmnd]
@@ -383,7 +396,7 @@ WITH
                         SUM([eow_oh_wk4_no_dmnd])
                           /
                        SUM( SUM( [projctd_dmnd_weekly_buckets].[4_wk_out] ) ) OVER
-                          ( PARTITION BY [projctd_dmnd_weekly_buckets].[item_id], [top_customer] ) )
+                          ( PARTITION BY [top_customer] ) )
                  END
         END
     FROM [available_dev_no_dmnd]
@@ -476,7 +489,7 @@ WITH
                         SUM([eow_oh_wk5_no_dmnd])
                           /
                        SUM( SUM( [projctd_dmnd_weekly_buckets].[5_wk_out] ) ) OVER
-                          ( PARTITION BY [projctd_dmnd_weekly_buckets].[item_id], [top_customer] ) )
+                          ( PARTITION BY [top_customer] ) )
                  END
         END
     FROM [available_dev_no_dmnd]
@@ -570,7 +583,7 @@ WITH
                         SUM([eow_oh_wk6_no_dmnd])
                           /
                        SUM( SUM( [projctd_dmnd_weekly_buckets].[6_wk_out] ) ) OVER
-                          ( PARTITION BY [projctd_dmnd_weekly_buckets].[item_id], [top_customer] ) )
+                          ( PARTITION BY [top_customer] ) )
                  END
         END
     FROM [available_dev_no_dmnd]
@@ -632,3 +645,4 @@ GROUP BY
   ,[item_lu].[class_code]
   ,[item_lu].[pop_code]
   ,[cte_cust_allctn_wk1].[top_customer] 
+
