@@ -1,4 +1,8 @@
-
+/* Every week a machine learning forecast is generated. The Order Qty is the base metric for feeding the forecast. 
+I used this rather than a factor of shipped plus the variance between order and shipped. In this case, I am 
+assuming that orders will come in with echo and noise. If I were forecasting months out for finished good
+purchase planning, I would smooth that echo/noise out.
+*/
 DROP TABLE IF EXISTS [projctd_dmnd_weekly_buckets];
 
 CREATE TABLE [projctd_dmnd_weekly_buckets]
@@ -13,7 +17,12 @@ CREATE TABLE [projctd_dmnd_weekly_buckets]
    ,[5_wk_out]     INT
    ,[6_wk_out]     INT
   );
-
+/* 
+The machine learning output often contains negative values. This cte eliminates them.
+The outputs are in designated quantile buckets. The p50 quantile assumess 50% of the 
+time the orders will come in greater than the designated number, and 50% of the time less.
+p60 40% greater, 60% less, etc...
+*/   
 WITH [cte_remove_zeroes]
  (
    [item_id]
@@ -53,6 +62,7 @@ AS
     ,[date]
 )
 ,
+--casting floats to integers
   [cte_float_to_int]
  (
    [item_id]
@@ -80,6 +90,7 @@ AS
      ,[date]
  )
 ,
+--calculate the weekly buckets. I do not use dynamic dates in order to align with the machine learning output dates
   [cte_calc]
  (
     [item_id]
