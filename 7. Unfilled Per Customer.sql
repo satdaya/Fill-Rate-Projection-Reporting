@@ -1,3 +1,6 @@
+
+--This query calculates the variance between the projected demand and the inventory that can be allocated.
+
 DROP TABLE IF EXISTS [unfilled_by_cust];
 
 CREATE TABLE [unfilled_by_cust]
