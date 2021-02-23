@@ -1,3 +1,5 @@
+--Pulls current inventory position. Allocated sku's are included.
+
 DROP TABLE IF EXISTS [current_inventory];
 
 CREATE TABLE [current_inventory] (
@@ -18,6 +20,7 @@ AS (
 SELECT 
    [SQLAccess.Part].[idnumber]
   ,[PartNumber]
+   --a 3 character line code precedes the part number. The line below removes the line code
   ,RIGHT(
      [PartNumber]
     ,LEN([PartNumber]) -3
