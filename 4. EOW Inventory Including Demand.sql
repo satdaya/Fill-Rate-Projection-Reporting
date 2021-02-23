@@ -3,7 +3,7 @@ This query examines the availability at the end of each week. It does so by:
  a. establishing the inventory at the end of prior week
  b. adding the incoming PO volume
  c. subtracting the anticipated demand
- A Case statement eliminates all negative quantities.
+ The case statement eliminates all negative quantities.
 */
 
 DROP TABLE IF EXISTS [available_dev];
