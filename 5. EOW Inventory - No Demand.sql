@@ -1,5 +1,7 @@
 /*
-The previous query established the demand at the end of each week. This query establishes just the current plus inbound calculation needed for the following calculation queries.
+The previous query established the demand at the end of each week. This query 
+establishes just the current plus inbound calculation needed for the following 
+calculation queries.
 */
 
 DROP TABLE IF EXISTS [available_dev_no_dmnd];
