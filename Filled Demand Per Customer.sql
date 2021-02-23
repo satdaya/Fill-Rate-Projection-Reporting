@@ -1,3 +1,5 @@
+--Divide allocated by the total allocated and unallocated.
+
 DROP TABLE IF EXISTS [fill_rate_proj_1_31_21];
 
 CREATE TABLE [fill_rate_proj_1_31_21]
