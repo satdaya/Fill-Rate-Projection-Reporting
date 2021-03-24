@@ -1,5 +1,6 @@
 /* 
 This query takes all in transit and on PO sku's scheduled to arrive within the next 6 weeks and breaks them into weekly buckets.
+I clean a spreadsheet with all inbound PO data in pandas prior to uploading in SQL Server.
 */
 
 DROP TABLE IF EXISTS [po_la_deux_cleaned];
@@ -29,7 +30,8 @@ WITH [cte_po_ld_buckets]
   )
 AS
   (
--- I do not use dynamic dates, as I run this query on varying days of the week.
+-- I do not use dynamic dates, as I run this query on varying days of the week. Update the weekly buckets based on outward looking dates.
+-- I assume that units received will not be available until the next week.
 SELECT
     [Part_Number]
    ,[line_code]
@@ -51,6 +53,7 @@ SELECT
    ,CASE WHEN [dbd] BETWEEN '2021-02-27' AND '2021-03-05'
          THEN SUM([qty])
          END
+    --update with current po_ld_file
  FROM [po_ld_1.23.2021]
 GROUP BY
    [Part_Number]
