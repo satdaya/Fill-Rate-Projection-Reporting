@@ -1,8 +1,10 @@
-/* Every week a machine learning forecast is generated. The Order Qty is the base metric for feeding the forecast. 
-I used this rather than a factor of shipped plus the variance between order and shipped. In this case, I am 
-assuming that orders will come in with echo and noise. If I were forecasting months out for finished good
-purchase planning, I would smooth that echo/noise out.
-*/
+--Every week a machine learning forecast is generated. The Order Qty is the base metric for feeding the forecast. 
+--I used this rather than a factor of shipped plus the variance between order and shipped. In this case, I am 
+--assuming that orders will come in with echo and noise. If I were forecasting months out for finished good
+--purchase planning, I would smooth that echo/noise out.
+
+--Update the forecast source (line 60) every run.
+
 DROP TABLE IF EXISTS [projctd_dmnd_weekly_buckets];
 
 CREATE TABLE [projctd_dmnd_weekly_buckets]
