@@ -11,6 +11,8 @@ The remainder of the query is an allocation order to ensure that multiple
 customers are not dividing by one, generating negative quantities.
 */
 
+--update needed prior to run: none
+
 DROP TABLE IF EXISTS [cust_allctn];
 
 CREATE TABLE [cust_allctn]
