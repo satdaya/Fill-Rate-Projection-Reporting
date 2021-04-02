@@ -4,6 +4,8 @@ establishes just the current plus inbound calculation needed for the following
 calculation queries.
 */
 
+--update needed prior to run: none
+
 DROP TABLE IF EXISTS [available_dev_no_dmnd];
 CREATE TABLE [available_dev_no_dmnd]( 
    [item_id]     VARCHAR(54) PRIMARY KEY
