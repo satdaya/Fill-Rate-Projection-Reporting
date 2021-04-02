@@ -6,6 +6,8 @@ This query examines the availability at the end of each week. It does so by:
  The case statement eliminates all negative quantities.
 */
 
+--update needed prior to run: none
+
 DROP TABLE IF EXISTS [available_dev];
 
 CREATE TABLE [available_dev]( 
