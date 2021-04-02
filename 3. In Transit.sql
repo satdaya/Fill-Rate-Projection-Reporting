@@ -1,7 +1,7 @@
-/* 
-This query takes all in transit and on PO sku's scheduled to arrive within the next 6 weeks and breaks them into weekly buckets.
-I clean a spreadsheet with all inbound PO data in pandas prior to uploading in SQL Server.
-*/
+--This query takes all in transit and on PO sku's scheduled to arrive within the next 6 weeks and breaks them into weekly buckets.
+--I clean a spreadsheet with all inbound PO data in pandas prior to uploading in SQL Server.
+
+--Update the PO LD (line_57] every run.
 
 DROP TABLE IF EXISTS [po_la_deux_cleaned];
 
