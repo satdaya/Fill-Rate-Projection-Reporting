@@ -1,4 +1,5 @@
 --Pulls current inventory position. Allocated sku's are included.
+--No updates needed if weekly_frcst_stage is updated
 
 DROP TABLE IF EXISTS [current_inventory];
 
@@ -44,8 +45,8 @@ GROUP BY
 AS (
   SELECT DISTINCT [short_partnumber]
   FROM [cte_fill_rate_projections] 
-  JOIN [4_wk_prjctd_dmnd_nocust_columnar_v5]
-    ON [cte_fill_rate_projections].[short_partnumber] = [4_wk_prjctd_dmnd_nocust_columnar_v5].[item_id]
+  JOIN [weekly_frcst_stage]
+    ON [cte_fill_rate_projections].[short_partnumber] = [weekly_frcst_stage].[item_id]
 )
 
 INSERT INTO [current_inventory] (
